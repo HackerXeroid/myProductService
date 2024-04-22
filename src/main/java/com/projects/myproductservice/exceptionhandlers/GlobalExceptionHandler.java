@@ -1,5 +1,6 @@
 package com.projects.myproductservice.exceptionhandlers;
 
+import com.projects.myproductservice.dtos.ExceptionDto;
 import com.projects.myproductservice.exceptions.ProductNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,15 +14,17 @@ public class GlobalExceptionHandler {
         ExceptionDto dto = new ExceptionDto();
         dto.setMessage("Something went wrong");
         dto.setResolution("ArithmeticException");
-        ResponseEntity<ExceptionDto> response = new ResponseEntity<>(dot, HttpStatus.BAD_REQUEST);
+
+        ResponseEntity<ExceptionDto> response = new ResponseEntity<>(dto, HttpStatus.BAD_REQUEST);
         return response;
     }
 
-    @ExceptionHandler(ArrayIndexOutOfBoundsException.class)
-    public ResponseEntity<ExceptionDto> handleArrayIndexOutOfBoundsException() {
+    @ExceptionHandler(NullPointerException.class)
+    public ResponseEntity<ExceptionDto> handleNullPointerException() {
         ExceptionDto dto = new ExceptionDto();
         dto.setMessage("Something went wrong");
-        dto.setResolution("ArrayIndexOutOfBoundsException");
+        dto.setResolution("NullPointerException");
+
         ResponseEntity<ExceptionDto> response = new ResponseEntity<>(dto, HttpStatus.BAD_REQUEST);
         return response;
     }
@@ -29,8 +32,19 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ProductNotFoundException.class)
     public ResponseEntity<ExceptionDto> handleProductNotFoundException(ProductNotFoundException productNotFoundException) {
         ExceptionDto dto = new ExceptionDto();
-        dto.setMessage("Invalid productId " + productNotFoundException.getId() + " passed");
-        dto.setResolution("ProductNotFoundException caught");
+        dto.setMessage("Invalid ID: " + productNotFoundException.getId());
+        dto.setResolution("ProductNotFoundException");
+
+        ResponseEntity<ExceptionDto> response = new ResponseEntity<>(dto, HttpStatus.BAD_REQUEST);
+        return response;
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ExceptionDto> handleException(Exception exception) {
+        ExceptionDto dto = new ExceptionDto();
+        dto.setMessage(exception.getMessage());
+        dto.setResolution("Exception");
+
         ResponseEntity<ExceptionDto> response = new ResponseEntity<>(dto, HttpStatus.BAD_REQUEST);
         return response;
     }
